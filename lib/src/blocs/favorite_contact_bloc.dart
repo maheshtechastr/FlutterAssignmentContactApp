@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:contactapp/src/models/contact.dart';
 import 'package:contactapp/src/resource/repository/contact_repository.dart';
 
-class ContactBloc {
+class FContactBloc {
   //Get instance of the Repository
   final _contactRepository = ContactRepository();
 
@@ -15,8 +15,8 @@ class ContactBloc {
 
   get contacts => _contactController.stream;
 
-  ContactBloc() {
-    getContacts();
+  FContactBloc() {
+    getContacts(query: "1");
   }
 
   getContacts({String query}) async {
@@ -28,21 +28,21 @@ class ContactBloc {
 
   addTodo(Contact contact) async {
     await _contactRepository.insertContact(contact);
-    getContacts();
+    getContacts(query: "1");
   }
 
   updateTodo(Contact contact) async {
     await _contactRepository.updateContact(contact);
-    getContacts();
+    getContacts(query: "1");
   }
 
   deleteContactById(int id) async {
     _contactRepository.deleteContactById(id);
-    getContacts();
+    getContacts(query: "1");
   }
 
   dispose() {
     _contactController.close();
   }
 }
-final contactBloc = ContactBloc();
+final fContactBloc = FContactBloc();

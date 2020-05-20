@@ -47,6 +47,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   var utils = Utils();
   static Contact contact;
   static String pageTitle;
+  bool _isNewContact;
 
   @override
   void initState() {
@@ -58,11 +59,9 @@ class MyCustomFormState extends State<MyCustomForm> {
       photo = contact.photo == null
           ? "https://i.imgur.com/BoN9kdC.png"
           : contact.photo;
+      _isNewContact = false;
     } else {
-      contact = Contact(
-        id: -1,
-      );
-      photo = "https://i.imgur.com/BoN9kdC.png";
+      _isNewContact = true;
     }
     super.initState();
   }
@@ -80,7 +79,8 @@ class MyCustomFormState extends State<MyCustomForm> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     print("====$contact");
-    print('===='+contact.id.toString());
+    print('_isNewContact====$_isNewContact');
+    double rightP = 20;
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
@@ -102,121 +102,155 @@ class MyCustomFormState extends State<MyCustomForm> {
             pageTitle == null ? "Add New Contact" : pageTitle,
           )),
       body: ListView(
+        padding: EdgeInsets.only(left: rightP, right: rightP),
         children: <Widget>[
-          Container(
-              //color: Colors.grey,
-              padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-              child: Form(
-                key: _formKey,
-                child: Column(
+          Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                GestureDetector(
+                    onTap: () => {},
+                    child: Container(
+                      width: 110,
+                      height: 110,
+                      margin: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(width: 2, color: Colors.black)),
+                      child: photo == null
+                          ? Icon(
+                              Icons.camera_alt,
+                              size: 90,
+                            )
+                          : Image.network(photo),
+                    )),
+                Row(
                   children: <Widget>[
-                    GestureDetector(
-                        onTap: () => {},
-                        child: Container(
-                          width: 110,
-                          height: 110,
-                          margin: EdgeInsets.all(20),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border:
-                                  Border.all(width: 2, color: Colors.black)),
-                          child: photo == null
-                              ? Icon(
-                                  Icons.camera_alt,
-                                  size: 90,
-                                )
-                              : Image.network(photo),
-                        )),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Name",
-                            textScaleFactor: 1.5,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ), // give it width
-                        Flexible(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 15),
-                            child: TextFormField(
-                              maxLines: 1,
-                              controller: nameController,
-                              decoration: _getTextFieldDeco(),
-                              keyboardType: TextInputType.text,
-                              // The validator receives the text that the user has entered.
-                              validator: (value) =>
-                                  utils.isFieldEmpty(value, "name"),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Mobile",
-                            textScaleFactor: 1.5,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ), // give it width
-                        Flexible(
-                          child: TextFormField(
-                            maxLines: 1,
-                            maxLength: 10,
-                            controller: mobileController,
-                            decoration: _getTextFieldDeco(),
-                            keyboardType: TextInputType.number,
-                            // The validator receives the text that the user has entered.
-                            validator: (value) =>
-                                utils.isFieldEmpty(value, "mobile number"),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Landline",
-                            textScaleFactor: 1.5,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ), // give it width
-                        Flexible(
-                          child: TextFormField(
-                            maxLines: 1,
-                            maxLength: 11,
-                            controller: phNumberController,
-                            decoration: _getTextFieldDeco(),
-                            keyboardType: TextInputType.number,
-                          ),
-                        )
-                      ],
-                    ),
-                    Align(
-                      child: RaisedButton(
-                          onPressed: () {
-                            // Validate returns true if the form is valid, otherwise false.
-                            _submittedForm(false);
-                          },
-                          child: Text(
-                            contact != null &&
-                            contact.id != null &&
-                                contact.id > 0
-                                ? 'Update'
-                                : "Save",
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        "Name",
+                        textScaleFactor: 1.5,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ), // give it width
+                    Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10, bottom: 15),
+                        child: TextFormField(
+                          maxLines: 1,
+                          controller: nameController,
+                          decoration: _getTextFieldDeco(),
+                          keyboardType: TextInputType.text,
+                          // The validator receives the text that the user has entered.
+                          validator: (value) =>
+                              utils.isFieldEmpty(value, "name"),
+                        ),
+                      ),
+                    )
                   ],
                 ),
-              ))
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        "Mobile",
+                        textScaleFactor: 1.5,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ), // give it width
+                    Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 2, bottom: 10),
+                        child: TextFormField(
+                          maxLines: 1,
+                          maxLength: 10,
+                          controller: mobileController,
+                          decoration: _getTextFieldDeco(),
+                          keyboardType: TextInputType.number,
+                          // The validator receives the text that the user has entered.
+                          validator: (value) =>
+                              utils.isFieldEmpty(value, "mobile number"),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        "Landline",
+                        textScaleFactor: 1.5,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ), // give it width
+                    Flexible(
+                      child: TextFormField(
+                        maxLines: 1,
+                        maxLength: 11,
+                        controller: phNumberController,
+                        decoration: _getTextFieldDeco(),
+                        keyboardType: TextInputType.number,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    // Expanded(child: Text(""),),
+                    SizedBox(
+                      child: Text(""),
+                      height: MediaQuery.of(context).size.height / 4,
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    !_isNewContact
+                        ? RaisedButton(
+                            onPressed: () {
+                              // Validate returns true if the form is valid, otherwise false.
+                              _deleteContact(contact);
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width - 75,
+                              child: Text(
+                                _isNewContact ? '' : "Delete",
+                                textScaleFactor: 1.3,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          )
+                        : Text("")
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: () {
+                        // Validate returns true if the form is valid, otherwise false.
+                        _submittedForm(false);
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 75,
+                        child: Text(
+                          _isNewContact ? 'Save' : "Update",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -238,7 +272,6 @@ class MyCustomFormState extends State<MyCustomForm> {
             mobNumber: mobileController.text,
             phNumber: phNumberController.text);
         contactBloc.addTodo(contact);
-        fContactBloc.addTodo(contact);
       } else {
         contact = Contact(
             id: contact.id,
@@ -249,8 +282,14 @@ class MyCustomFormState extends State<MyCustomForm> {
         contactBloc.updateTodo(contact);
         fContactBloc.updateTodo(contact);
       }
-       Navigator.pop(context);
+      Navigator.pop(context);
     }
+  }
+
+  _deleteContact(contact) {
+    contactBloc.deleteContactById(contact.id);
+    fContactBloc.deleteContactById(contact.id);
+    Navigator.pop(context);
   }
 
   _getTextFieldDeco() {
