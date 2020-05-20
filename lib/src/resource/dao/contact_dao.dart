@@ -27,7 +27,7 @@ class ContactDao {
             where: 'isFavorite = ?',
             whereArgs: [query]);
     } else {
-      result = await db.query(contactTABLE, columns: columns);
+      result = await db.query(contactTABLE, columns: columns,orderBy: "Name ASC");
     }
 
     List<Contact> contacts = result.isNotEmpty

@@ -33,13 +33,20 @@ class ContactListState extends State<ContactListPage> {
       body: StreamBuilder(
         stream: contactBloc.contacts,
         builder: (context, AsyncSnapshot<List<Contact>> response) {
-          if (response.hasData) {
+          print("Data==" + response.data.toString());
+          print("HasError==" + response.hasError.toString());
+          print("hasData==" + response.hasData.toString());
+          if (response.hasData && response.data.length > 0) {
             return buildList(response);
-          } else if (response.hasError) {
+          } else if (response.hasError ||
+              (response.data != null && response.data.length <= 0)) {
             return Center(
               child: Text(
                 "Please Create contacts from below '+' button",
-                style: TextStyle(color: Colors.cyan),
+                textScaleFactor: 1.3,
+                style: TextStyle(
+                  color: Colors.black54,
+                ),
               ),
             );
           }
@@ -77,4 +84,3 @@ class ContactListState extends State<ContactListPage> {
     );
   }
 }
-

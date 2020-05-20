@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:contactapp/src/blocs/contact_bloc.dart';
 import 'package:contactapp/src/blocs/favorite_contact_bloc.dart';
 import 'package:contactapp/src/models/contact.dart';
 import 'package:contactapp/src/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddEditContact extends StatelessWidget {
   final pageTitle;
@@ -43,11 +46,25 @@ class MyCustomFormState extends State<MyCustomForm> {
   final mobileController = TextEditingController();
   final phNumberController = TextEditingController();
   static bool isFavorite = false;
-  var photo;
+
+  //var photo;
   var utils = Utils();
   static Contact contact;
   static String pageTitle;
   bool _isNewContact;
+
+  File _image;
+
+  Future getImage(final isCamera) async {
+    var image = await ImagePicker.pickImage(
+        source: isCamera ? ImageSource.camera : ImageSource.gallery);
+    print("getImage==>" + image.toString());
+    print("getImage Path==" + image.path);
+    if (image != null)
+      setState(() {
+        _image = image;
+      });
+  }
 
   @override
   void initState() {
@@ -56,9 +73,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       mobileController.text = contact.mobNumber;
       phNumberController.text = contact.phNumber;
       isFavorite = contact.isFavorite;
-      photo = contact.photo == null
-          ? "https://i.imgur.com/BoN9kdC.png"
-          : contact.photo;
+      _image = contact.photo != null ? File(contact.photo) : null;
       _isNewContact = false;
     } else {
       _isNewContact = true;
@@ -78,7 +93,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    print("====$contact");
+    print("getImage IMG====$_image");
     print('_isNewContact====$_isNewContact');
     double rightP = 20;
     return Scaffold(
@@ -109,7 +124,57 @@ class MyCustomFormState extends State<MyCustomForm> {
             child: Column(
               children: <Widget>[
                 GestureDetector(
-                    onTap: () => {},
+                    onTap: () => {
+                          //getImage(),
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    /*     title: Text(
+                                        "Pick/Capture your profile image.",
+                                    textScaleFactor: 1.5,),*/
+                                    content: Container(
+                                      child: Row(
+                                        children: <Widget>[
+                                          GestureDetector(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.camera,
+                                                  size: 100,
+                                                ),
+                                                Text("Camera")
+                                              ],
+                                            ),
+                                            onTap: () => {
+                                              getImage(true),
+                                              Navigator.of(context).pop()
+                                            },
+                                          ),
+                                          Spacer(),
+                                          GestureDetector(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.image,
+                                                  size: 100,
+                                                ),
+                                                Text("Gallery")
+                                              ],
+                                            ),
+                                            onTap: () => {
+                                              getImage(false),
+                                              Navigator.of(context).pop()
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              6,
+                                    ),
+                                  )),
+                          print("_image=== $_image \n===>" + _image.path),
+                        },
                     child: Container(
                       width: 110,
                       height: 110,
@@ -118,12 +183,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(width: 2, color: Colors.black)),
-                      child: photo == null
+                      child: _image == null
                           ? Icon(
                               Icons.camera_alt,
                               size: 90,
                             )
-                          : Image.network(photo),
+                          :
+                          //Image.network(photo)
+                          Image.file(_image),
                     )),
                 Row(
                   children: <Widget>[
@@ -265,16 +332,19 @@ class MyCustomFormState extends State<MyCustomForm> {
           isFavorite = !isFavorite;
         });
 
-      if (contact.id <= 0) {
+      if (_isNewContact) {
         contact = Contact(
+            photo: _image != null ? _image.path : "",
             isFavorite: isFavorite,
             name: nameController.text,
             mobNumber: mobileController.text,
             phNumber: phNumberController.text);
         contactBloc.addTodo(contact);
+        _isNewContact = false;
       } else {
         contact = Contact(
             id: contact.id,
+            photo: _image != null ? _image.path : "",
             isFavorite: isFavorite,
             name: nameController.text,
             mobNumber: mobileController.text,
