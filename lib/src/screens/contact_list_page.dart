@@ -11,6 +11,8 @@ class ContactListPage extends StatefulWidget {
 }
 
 class ContactListState extends State<ContactListPage> {
+  //StreamController<List<Contact>> controller;
+
   @override
   void initState() {
     super.initState();
@@ -19,12 +21,13 @@ class ContactListState extends State<ContactListPage> {
 
   @override
   void dispose() {
-    contactBloc.dispose();
+    //contactBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+//    controller = GlobalValues.of(context).controller;
     return Scaffold(
       body: StreamBuilder(
         stream: contactBloc.contacts,
@@ -33,25 +36,11 @@ class ContactListState extends State<ContactListPage> {
             return buildList(response);
           } else if (response.hasError) {
             return Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                  Text("Something went wrong"),
-                  Text("Give it another try"),
-                  RaisedButton(
-                    color: Colors.white,
-                    elevation: 0,
-                    child: Text(
-                      "RELOAD",
-                      style: TextStyle(color: Colors.cyan),
-                    ),
-                    onPressed: () {
-                      print("Reload clicked");
-                      contactBloc.getContacts();
-                    },
-                  ),
-                ]));
+              child: Text(
+                "Please Create contacts from below '+' button",
+                style: TextStyle(color: Colors.cyan),
+              ),
+            );
           }
           return Center(child: CircularProgressIndicator());
         },
@@ -95,43 +84,56 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: <Widget>[
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Container(
-              width: 60.0,
-              height: 60.0,
-              decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey,
-                  image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: new NetworkImage(
-                          "https://i.imgur.com/BoN9kdC.png")))),
-        ],
-      ),
-      Flexible(
-          child: Container(
-              padding: EdgeInsets.only(left: 10.0, right: 10),
-              child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      contact.name,
-                      textScaleFactor: 1.5,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      contact.mobNumber,
-                      style: TextStyle(fontWeight: FontWeight.w300),
-                      textScaleFactor: 1.2,
-                      textAlign: TextAlign.left,
-                    )
-                  ])))
-    ]);
+    return GestureDetector(
+        onTap: () => {
+              print("List Item clicked==>" + contact.name),
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddEditContact(
+                            contact: contact,
+                            pageTitle: "Update Contact",
+                          )))
+            },
+        child: Row(
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    width: 60.0,
+                    height: 60.0,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                        image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: new NetworkImage(
+                                "https://i.imgur.com/BoN9kdC.png")))),
+              ],
+            ),
+            Flexible(
+                child: Container(
+                    padding: EdgeInsets.only(left: 10.0, right: 10),
+                    child: Column(
+                        //mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            contact.name,
+                            textScaleFactor: 1.5,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            contact.mobNumber,
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                            textScaleFactor: 1.2,
+                            textAlign: TextAlign.left,
+                          )
+                        ])))
+          ],
+        ));
   }
 }

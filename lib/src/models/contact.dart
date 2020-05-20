@@ -6,13 +6,14 @@ class Contact{
   String photo;
   bool isFavorite;
 
-  Contact({this.name, this.mobNumber, this.phNumber, this.photo,
+  Contact({this.id, this.name, this.mobNumber, this.phNumber, this.photo,
       this.isFavorite});
 
   factory Contact.fromDatabaseJson(Map<String, dynamic> data) => Contact(
     //This will be used to convert JSON objects that
     //are coming from querying the database and converting
     //it into a Contact object
+    id: data['id'],
     name: data['name'],
     mobNumber: data['mobNumber'],
     phNumber: data['phNumber'],
@@ -25,6 +26,7 @@ class Contact{
   Map<String, dynamic> toDatabaseJson() => {
     //This will be used to convert Todo objects that
     //are to be stored into the datbase in a form of JSON
+    "id": this.id,
     "name": this.name,
     "mobNumber": this.mobNumber,
     "phNumber": this.phNumber,

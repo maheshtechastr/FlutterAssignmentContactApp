@@ -20,11 +20,12 @@ class ContactDao {
 
     List<Map<String, dynamic>> result;
     if (query != null) {
+      print("From DB DAO =>$query");
       if (query.isNotEmpty)
         result = await db.query(contactTABLE,
             columns: columns,
-            where: 'name LIKE ?',
-            whereArgs: ["%$query%"]);
+            where: 'isFavorite = ?',
+            whereArgs: [query]);
     } else {
       result = await db.query(contactTABLE, columns: columns);
     }
