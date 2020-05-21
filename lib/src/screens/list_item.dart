@@ -13,7 +13,6 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () => {
-              print("List Item clicked==>" + contact.name),
               Navigator.push(
                   context,
                   MaterialPageRoute(

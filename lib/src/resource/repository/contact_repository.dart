@@ -13,6 +13,5 @@ class ContactRepository {
 
   Future deleteContactById(int id) => contactDao.deleteContact(id);
 
-  //We are not going to use this in the demo
   Future deleteAllContacts() => contactDao.deleteAllContacts();
 }

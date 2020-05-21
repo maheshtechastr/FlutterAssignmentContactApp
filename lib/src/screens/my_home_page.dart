@@ -18,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 class HomePageState extends State<MyHomePage> {
   int _selectedDrawerIndex = 0;
+
 //  StreamController ctrl;
 //  ContactBloc bloc = ContactBloc();
 //
@@ -46,13 +47,6 @@ class HomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-//    // listen to multiple streams
-//    ctrl = StreamController<List<Contact>>.broadcast();
-//    // get and add a Stream
-//    ctrl.addStream(bloc.contacts);
-//    // get access to StreamController
-//    GlobalValues.of(context).controller = ctrl;
-
     var drawerOptions = <Widget>[];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];

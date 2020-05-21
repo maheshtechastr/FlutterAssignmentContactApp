@@ -33,9 +33,6 @@ class ContactListState extends State<ContactListPage> {
       body: StreamBuilder(
         stream: contactBloc.contacts,
         builder: (context, AsyncSnapshot<List<Contact>> response) {
-          print("Data==" + response.data.toString());
-          print("HasError==" + response.hasError.toString());
-          print("hasData==" + response.hasData.toString());
           if (response.hasData && response.data.length > 0) {
             return buildList(response);
           } else if (response.hasError ||

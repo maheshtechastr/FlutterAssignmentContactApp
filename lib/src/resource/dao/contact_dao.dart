@@ -20,7 +20,6 @@ class ContactDao {
 
     List<Map<String, dynamic>> result;
     if (query != null) {
-      print("From DB DAO =>$query");
       if (query.isNotEmpty)
         result = await db.query(contactTABLE,
             columns: columns,

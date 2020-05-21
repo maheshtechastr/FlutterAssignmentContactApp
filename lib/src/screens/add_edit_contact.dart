@@ -58,8 +58,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   Future getImage(final isCamera) async {
     var image = await ImagePicker.pickImage(
         source: isCamera ? ImageSource.camera : ImageSource.gallery);
-    print("getImage==>" + image.toString());
-    print("getImage Path==" + image.path);
     if (image != null)
       setState(() {
         _image = image;
@@ -93,8 +91,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    print("getImage IMG====$_image");
-    print('_isNewContact====$_isNewContact');
     double rightP = 20;
     return Scaffold(
       appBar: AppBar(
@@ -173,7 +169,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                                               6,
                                     ),
                                   )),
-                          print("_image=== $_image \n===>" + _image.path),
                         },
                     child: Container(
                       width: 110,
