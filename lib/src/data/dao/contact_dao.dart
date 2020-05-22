@@ -1,6 +1,7 @@
 import 'dart:async';
+
+import 'package:contactapp/src/data/db/database.dart';
 import 'package:contactapp/src/models/contact.dart';
-import 'package:contactapp/src/resource/db/database.dart';
 
 class ContactDao {
   final dbProvider = DatabaseProvider.dbProvider;
@@ -23,10 +24,12 @@ class ContactDao {
       if (query.isNotEmpty)
         result = await db.query(contactTABLE,
             columns: columns,
+            orderBy: "Name ASC",
             where: 'isFavorite = ?',
             whereArgs: [query]);
     } else {
-      result = await db.query(contactTABLE, columns: columns,orderBy: "Name ASC");
+      result =
+          await db.query(contactTABLE, columns: columns, orderBy: "Name ASC");
     }
 
     List<Contact> contacts = result.isNotEmpty

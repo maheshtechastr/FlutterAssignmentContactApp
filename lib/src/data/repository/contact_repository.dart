@@ -1,5 +1,5 @@
 import 'package:contactapp/src/models/contact.dart';
-import 'package:contactapp/src/resource/dao/contact_dao.dart';
+import 'package:contactapp/src/data/dao/contact_dao.dart';
 
 
 class ContactRepository {

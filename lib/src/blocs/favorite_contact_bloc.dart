@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:contactapp/src/models/contact.dart';
-import 'package:contactapp/src/resource/repository/contact_repository.dart';
+import 'package:contactapp/src/data/repository/contact_repository.dart';
 
 class FContactBloc {
   //Get instance of the Repository
